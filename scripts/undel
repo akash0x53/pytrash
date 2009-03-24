@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#
+# pytrash, the command line tool for the GNOME Trash
+# License: GPLv2, see README and COPYING for more details.
+# 
+
+import sys
+from pytrash import Trash,TrashCan,VERSION,PATH
+
+def main():
+    from optparse import OptionParser
+
+    parser = OptionParser()
+    parser.add_option('-d','--dry',action='store_true',dest='dry',default=False,help='only shows what items will be trashed')
+    parser.add_option('-v','--verbose',action='store_true',dest='verbose',default=False,help='explain what is being done')
+    parser.add_option('-V','--version',action='store_true',dest='version',default=False,help='show version')
+
+    (opts, args) = parser.parse_args()
+
+    if opts.version:
+        print 'Trash script; Version %s' % VERSION
+        sys.exit(1)
+
+    trashcan = TrashCan(PATH, opts.dry)
+    trashes = trashcan.all()
+
+    if trashes == []:
+        print 'No dust is in the trash.'
+        sys.exit(1)
+
+    if args == []:
+        args = [len(trashes)-1]
+    for arg in args:
+        arg = int(arg)
+        if arg in range(len(trashes)):
+            trashcan.remove(trashes[arg])
+            if opts.verbose:
+                print 'undelete "%s".' % trashes[arg]
+        else:
+            print 'Invalid number of trash.: %d' % arg
+
+
+if __name__ == '__main__':
+    main()
