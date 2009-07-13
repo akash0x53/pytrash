@@ -56,12 +56,14 @@ class TrashCan:
                 os.remove(os.path.join(self.INFO, trash.infofile))
 
     def delete(self, trash):
-        if os.path.isfile(os.path.join(self.FILES, trash.file)) and not self.dry:
-          os.remove(os.path.join(self.FILES, trash.file))
-          os.remove(os.path.join(self.INFO, trash.infofile))
+        if (os.path.isfile(os.path.join(self.FILES, trash.file)) or 
+                os.path.islink(os.path.join(self.FILES, trash.file))
+                ) and not self.dry:
+            os.remove(os.path.join(self.FILES, trash.file))
+            os.remove(os.path.join(self.INFO, trash.infofile))
         elif os.path.isdir(os.path.join(self.FILES, trash.file)) and not self.dry:
-          shutil.rmtree(os.path.join(self.FILES, trash.file))
-          os.remove(os.path.join(self.INFO, trash.infofile))
+            shutil.rmtree(os.path.join(self.FILES, trash.file))
+            os.remove(os.path.join(self.INFO, trash.infofile))
 
     def __len__(self):
         return self.__count
