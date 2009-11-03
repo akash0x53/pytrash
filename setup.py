@@ -4,13 +4,14 @@
 
 from distutils.core import setup
 
-setup(name='pytrash',
-      version='0.3',
-      description='The command line tool for the GNOME Trash',
-      author='Kei Taneishi',
-      author_email='ktaneishi@gmail.com',
-      url='http://code.google.com/p/pytrash/',
-      packages=['pytrash'],
-      scripts=['scripts/trash', 'scripts/undel', 'scripts/emptytrash'],
-      license='GNU Public License Version 2',
-     )
+setup(
+        name='pytrash',
+        version='0.3',
+        url='http://code.google.com/p/pytrash/',
+        author='Kei Taneishi',
+        author_email='ktaneishi@gmail.com',
+        description='The command line tool for the GNOME Trash',
+        packages=['pytrash'],
+        scripts=['scripts/trash', 'scripts/undel', 'scripts/emptytrash'],
+        license='GNU Public License Version 2',
+        )
