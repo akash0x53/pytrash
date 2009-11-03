@@ -7,13 +7,11 @@ Introduction
 The pytrash is a command line tool for the GNOME Trash.
 The pytrash includes the follow scripts:
 
-trash
-	removes files or directories to the GNOME Trash.
-
-undel
+- trash
+    removes files or directories to the GNOME Trash.
+- undel
 	undeletes the files or directories from the GNOME Trash.
-
-emptytrash
+- emptytrash
 	really deletes files or directories in the GNOME Trash.
 
 See '--help' option of each script. 
@@ -21,7 +19,8 @@ See '--help' option of each script.
 INSTALL
 -------
 
-Edit a PATH variable of a pytrash/__init__.py file to specify the correct path for the GNOME Trash.
+Edit a PATH variable of a pytrash/__init__.py file 
+to specify the correct path for the GNOME Trash.
 The deafult path is a '.local/share/Trash'.
 
 $ python setup.py install
@@ -31,7 +30,7 @@ HOW TO USE
 
 Make a alias for the trash script as the "rm" command.
 
-$ alias rm=trash
+    $ alias rm=trash
 
 You can use the "rm" same as before and undelete files or directories
 by the undel script.
@@ -41,3 +40,4 @@ TODO
 
 - The symbolic link are simply deleted and cannot undelete.
 
+.. end of document

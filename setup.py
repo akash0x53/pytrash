@@ -5,7 +5,7 @@
 from distutils.core import setup
 
 setup(name='pytrash',
-      version='0.2',
+      version='0.3',
       description='The command line tool for the GNOME Trash',
       author='Kei Taneishi',
       author_email='ktaneishi@gmail.com',

@@ -9,7 +9,7 @@ import os,sys,shutil
 from urllib import quote,unquote
 from datetime import datetime,timedelta
 
-VERSION = '0.2'
+VERSION = '0.3'
 PATH = '.local/share/Trash'
 
 class TrashCan:

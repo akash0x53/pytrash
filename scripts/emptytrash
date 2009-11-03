@@ -5,43 +5,7 @@
 # License: GPLv2, see README and COPYING for more details.
 # 
 
-import sys
-from datetime import datetime,timedelta
-from pytrash import Trash,TrashCan,VERSION,PATH
-
-def main():
-    from optparse import OptionParser
-
-    parser = OptionParser()
-    parser.add_option('-d','--dry',action='store_true',dest='dry',default=False,help='only shows what items will be trashed')
-    parser.add_option('-v','--verbose',action='store_true',dest='verbose',default=False,help='explain what is being done')
-    parser.add_option('-V','--version',action='store_true',dest='version',default=False,help='show version')
-
-    (opts, args) = parser.parse_args()
-
-    if opts.version:
-        print 'Trash script; Version %s' % VERSION
-        sys.exit(1)
-
-    if args == []:
-        HOUR = 24*3
-    else:
-        HOUR = int(args[0])
-
-    hourdelta = timedelta(0,HOUR*60*60)
-    threshold = datetime.today() - hourdelta
-
-    trashcan = TrashCan(PATH, opts.dry)
-    trashes = trashcan.all()
-
-    # compare the time
-    trashes = [trash for trash in trashes if trash.date < threshold.strftime('%Y-%m-%dT%H:%M:%S')]
-
-    for trash in trashes:
-        trashcan.delete(trash)
-        if opts.verbose:
-            print 'remove "%s"' % trash
-
+from pytrash import commands
 
 if __name__ == '__main__':
-    main()
+    commands.empty()
