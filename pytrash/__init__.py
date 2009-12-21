@@ -5,84 +5,96 @@
 # License: GPLv2, see README and COPYING for more details.
 # 
 
-import os,sys,shutil
+import os
+import sys
+import shutil
 from urllib import quote,unquote
 from datetime import datetime,timedelta
+from ConfigParser import ConfigParser
 
 VERSION = '0.3'
 PATH = '.local/share/Trash'
+TRASH = os.path.join(os.environ['HOME'],PATH)
+POSTFIX = '.trashinfo'
 
 class TrashCan:
-    '''A class of trash can.'''
+    '''Class of trash can.'''
     def __init__(self, PATH, is_dry):
-        '''configuring trash directories.'''
-        self.FILES = os.path.join(os.environ['HOME'],PATH,'files')
-        self.INFO = os.path.join(os.environ['HOME'],PATH,'info')
-        self.__all = sorted([Trash(os.path.join(self.INFO,name)) for name in os.listdir(self.INFO)])
-        self.__count = 0
+        '''initial settings.'''
+        self.FILE = os.path.join(TRASH,'files')
+        self.INFO = os.path.join(TRASH,'info')
+        self.count = 0 # a number of trashed targets.
         self.dry = is_dry
+        self.__all__ = sorted([Trash(name) for name in os.listdir(self.INFO)])
+
+    def __len__(self):
+        return self.count
 
     def all(self):
         '''return all trash files.'''
-        return self.__all
+        return self.__all__
 
     def add(self,target):
-        '''target is a new trash file.'''
-        sub = 2
+        '''move a target file into TrashCan.'''
+        sub = 0 # subscription number
         name = os.path.basename(target)
-        while os.path.exists(os.path.join(self.FILES, name)):
-            name = os.path.basename(target) + '.' + str(sub)
+        while os.path.exists(os.path.join(self.FILE, name)):
+            name = '%s.%d' % (os.path.basename(target),sub)
             sub += 1
 
         if self.dry:
-            print target, name
+            print target,name
         else:
-            shutil.move(target, os.path.join(self.FILES, name))
-            out = open(os.path.join(self.INFO, name)+'.trashinfo', 'w')
+            shutil.move(target, os.path.join(self.FILE, name))
+            out = open(os.path.join(self.INFO, name)+POSTFIX, 'w')
             out.write('[Trash Info]\nPath=%s\nDeletionDate=%s' % (
                  quote(os.path.abspath(target)),
                  datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
                  ))
             out.close()
-        self.__count += 1
+        self.count += 1
 
-    def remove(self,trash):
-        name = os.path.basename(trash.path)
+    def undelete(self,trash):
+        '''undelete trash from TrashCan.'''
+        name = unquote(os.path.basename(trash.origpath))
         if os.path.exists(name):
+            '''if the same name file exists.'''
             print 'cannot overwrite "%s"' % name
+        elif self.dry:
+            pass 
         else:
-            if not self.dry:
-                shutil.move(os.path.join(self.FILES, trash.file), unquote(name))
-                os.remove(os.path.join(self.INFO, trash.infofile))
+            shutil.move(trash.filepath, name)
+            os.remove(trash.infopath)
 
-    def delete(self, trash):
-        if (os.path.isfile(os.path.join(self.FILES, trash.file)) or 
-                os.path.islink(os.path.join(self.FILES, trash.file))
-                ) and not self.dry:
-            os.remove(os.path.join(self.FILES, trash.file))
-            os.remove(os.path.join(self.INFO, trash.infofile))
-        elif os.path.isdir(os.path.join(self.FILES, trash.file)) and not self.dry:
-            shutil.rmtree(os.path.join(self.FILES, trash.file))
-            os.remove(os.path.join(self.INFO, trash.infofile))
-
-    def __len__(self):
-        return self.__count
+    def delete(self,trash):
+        '''real delete.'''
+        if self.dry:
+            pass
+        elif os.path.isfile(trash.filepath) or os.path.islink(trash.filepath):
+            os.remove(trash.filepath)
+            os.remove(trash.infopath)
+        elif os.path.isdir(trash.filepath):
+            shutil.rmtree(trash.filepath)
+            os.remove(trash.infopath)
 
 class Trash:
-    '''A class of trash file.'''
-    def __init__(self,infofile):
+    '''Class of trash file.'''
+    def __init__(self,info):
         '''load a trash information file.'''
-        from ConfigParser import ConfigParser
+        self.INFO = os.path.join(os.environ['HOME'],PATH,'info')
+        self.FILE = os.path.join(os.environ['HOME'],PATH,'files')
         c = ConfigParser()
-        c.read(infofile)
-        self.path = c.get('Trash Info', 'Path')
+        c.read(os.path.join(self.INFO,info))
+        self.origpath = c.get('Trash Info', 'Path') # original path
         self.date = c.get('Trash Info', 'DeletionDate')
-        self.infofile = os.path.basename(infofile)
-        self.file = self.infofile[0:-10]
+        self.file = info[0:-len(POSTFIX)] # filename
+        self.info = info # info filename
+        self.filepath = os.path.join(self.FILE, self.file)
+        self.infopath = os.path.join(self.INFO, self.info)
 
     def __cmp__(self,other):
         return cmp(self.date, other.date)
 
     def __str__(self):
-        return '%s\t%s' % (self.date, unquote(self.path))
+        return '%s\t%s' % (self.date, unquote(self.origpath))
 
