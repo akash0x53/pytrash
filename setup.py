@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup(
         name='pytrash',
-        version='0.3',
+        version='0.3.1',
         url='http://code.google.com/p/pytrash/',
         author='Kei Taneishi',
         author_email='ktaneishi@gmail.com',

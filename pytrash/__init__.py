@@ -60,17 +60,15 @@ class TrashCan:
         if os.path.exists(name):
             '''if the same name file exists.'''
             print 'cannot overwrite "%s"' % name
-        elif self.dry:
-            pass 
-        else:
+        elif not self.dry:
             shutil.move(trash.filepath, name)
             os.remove(trash.infopath)
 
     def delete(self,trash):
         '''real delete.'''
         if self.dry:
-            pass
-        elif os.path.isfile(trash.filepath) or os.path.islink(trash.filepath):
+            return
+        if os.path.isfile(trash.filepath) or os.path.islink(trash.filepath):
             os.remove(trash.filepath)
             os.remove(trash.infopath)
         elif os.path.isdir(trash.filepath):
