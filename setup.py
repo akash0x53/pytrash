@@ -6,12 +6,12 @@ from distutils.core import setup
 
 setup(
         name='pytrash',
-        version='0.3.1',
+        version='0.3.2',
         url='http://code.google.com/p/pytrash/',
         author='Kei Taneishi',
         author_email='ktaneishi@gmail.com',
         description='The command line tool for the GNOME Trash',
         packages=['pytrash'],
-        scripts=['scripts/trash', 'scripts/undel', 'scripts/emptytrash'],
+        scripts=['scripts/trash', 'scripts/undel',],
         license='GNU Public License Version 2',
         )

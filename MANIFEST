@@ -2,6 +2,5 @@ README
 setup.py
 pytrash/__init__.py
 pytrash/commands.py
-scripts/emptytrash
 scripts/trash
 scripts/undel
