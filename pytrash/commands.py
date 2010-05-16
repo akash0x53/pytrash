@@ -14,21 +14,18 @@ from pytrash import PATH,VERSION,TrashCan,Trash
 from urllib import quote,unquote
 
 def trash():
-    parser = OptionParser(usage='%prog [options] [files]')
+    parser = OptionParser(usage='%prog [options] [files]',version='%prog: '+VERSION)
     parser.add_option('-d','--dry',action='store_true',dest='dry',default=False,help='only shows what items will be trashed')
-    parser.add_option('-e','--regexp',action='store',dest='regexp',default=None,help='regular expression to select trashes')
     parser.add_option('-f','--force',action='store_true',dest='force',default=False,help='remove locked items')
-    parser.add_option('-H','--hours',action='store',dest='hours',type=int,default=None,help='select trashes till this hours')
-    parser.add_option('-D','--delete',action='store_true',dest='delete',default=False,help='delete trashes')
     parser.add_option('-r','--recursive',action='store_true',dest='recursive',default=False,help='remove directories recursively')
+    parser.add_option('-e','--regexp',action='store',dest='regexp',default=None,
+            help='regular expression to select trashes (use with -D)')
+    parser.add_option('-H','--hours',action='store',dest='hours',type=int,default=None,
+            help='select trashes till this hours (use with -D)')
+    parser.add_option('-D','--delete',action='store_true',dest='delete',default=False,help='delete trashes')
     parser.add_option('-v','--verbose',action='store_true',dest='verbose',default=False,help='explain what is being done')
-    parser.add_option('-V','--version',action='store_true',dest='version',default=False,help='show version')
 
     (opts, args) = parser.parse_args()
-
-    if opts.version:
-        print 'Trash script: Version %s' % VERSION
-        sys.exit(1)
 
     trashcan = TrashCan(PATH, opts.dry, opts.verbose)
 
@@ -59,10 +56,10 @@ def trash():
         sys.exit(0)
 
     if args == []:
-        '''if args are not specified, show a list of trashes.'''
+        '''show a list of trashes.'''
         trashes = trashcan.all()
-        for trash in trashes:
-            print trash
+        for order,trash in zip(xrange(len(trashes)), trashes):
+            print order,trash
         sys.exit(0)
 
     for target in args:
@@ -81,16 +78,13 @@ def trash():
         print '%d files and directories are trashed.' % len(trashcan)
         
 def undel():
-    parser = OptionParser(usage='%prog [num]')
-    parser.add_option('-d','--dry',action='store_true',dest='dry',default=False,help='only shows what items will be trashed')
-    parser.add_option('-v','--verbose',action='store_true',dest='verbose',default=False,help='explain what is being done')
-    parser.add_option('-V','--version',action='store_true',dest='version',default=False,help='show version')
+    parser = OptionParser(usage='%prog [num]',version='%prog: '+VERSION)
+    parser.add_option('-d','--dry',action='store_true',dest='dry',default=False,
+            help='only shows what items will be trashed')
+    parser.add_option('-v','--verbose',action='store_true',dest='verbose',default=False,
+            help='explain what is being done')
 
     (opts, args) = parser.parse_args()
-
-    if opts.version:
-        print 'Trash script: Version %s' % VERSION
-        sys.exit(1)
 
     trashcan = TrashCan(PATH, opts.dry, opts.verbose)
     trashes = trashcan.all()
