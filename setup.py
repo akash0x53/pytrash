@@ -9,7 +9,7 @@ setup(
         author='Kei Taneishi',
         author_email='ktaneishi@gmail.com',
         description='The command line interface for the gnome trash can',
-        #packages=['pytrash.py'],
+        #packages=['pytrash'],
         py_modules=['pytrash',],
         scripts=['scripts/trash',],
         license='GNU Public License Version 3',

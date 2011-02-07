@@ -14,7 +14,7 @@ from datetime import datetime,timedelta
 from optparse import OptionParser
 from ConfigParser import ConfigParser
 
-VERSION = '0.3.2'
+VERSION = '0.3.3'
 PATH = '.local/share/Trash'
 HOME = os.environ['HOME']
 TRASH = os.path.join(HOME,PATH)
