@@ -1,6 +1,4 @@
 README
 setup.py
-pytrash/__init__.py
-pytrash/commands.py
+pytrash.py
 scripts/trash
-scripts/undel
