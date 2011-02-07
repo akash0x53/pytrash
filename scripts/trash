@@ -5,7 +5,7 @@
 # License: GPLv2, see README and COPYING for more details.
 #
 
-from pytrash import commands
+from pytrash import trash
 
 if __name__ == '__main__':
-    commands.trash()
+    trash()

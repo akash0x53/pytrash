@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # coding:utf-8
-#
-
 from distutils.core import setup
 
 setup(
         name='pytrash',
-        version='0.3.2',
+        version='0.3.3',
         url='http://code.google.com/p/pytrash/',
         author='Kei Taneishi',
         author_email='ktaneishi@gmail.com',
-        description='The command line tool for the GNOME Trash',
-        packages=['pytrash'],
-        scripts=['scripts/trash', 'scripts/undel',],
-        license='GNU Public License Version 2',
+        description='The command line interface for the gnome trash can',
+        #packages=['pytrash.py'],
+        py_modules=['pytrash',],
+        scripts=['scripts/trash',],
+        license='GNU Public License Version 3',
         )
