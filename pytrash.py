@@ -143,14 +143,15 @@ def trash():
                 sys.stderr.write('Invalid number was specified.: %d\n' % arg)
 
     if opts.regexp:
-        for trash in trashcan.all():
+        trashes = trashcan.all()
+        for order,trash in zip(xrange(len(trashes)),trashes):
             if re.search(opts.regexp, unquote(trash.origpath)):
                 if opts.delete:
                     trashcan.delete(trash)
                     if opts.verbose:
                         print 'remove "%s"' % trash
                 else:
-                    print trash
+                    print order,trash
 
     if opts.hours:
         hourdelta = timedelta(0,opts.hours*60*60)
